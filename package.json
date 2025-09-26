@@ -1,0 +1,34 @@
+{
+  "name": "vite-lib",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
+  "main": "./dist/cjs/vite-lib.cjs",
+  "module": "./dist/es/vite-lib.js",
+  "types": "./index.d.ts",
+  "exports": {
+    "types": "./index.d.ts",
+    "import": "./dist/counter.js",
+    "require": "./dist/cjs/vite-lib.cjs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build:iife": "tsc && vite build -f iife & tsc",
+    "build:cjs": "tsc && vite build -f cjs & tsc",
+    "build:amd": "tsc && vite build -f amd & tsc",
+    "build:umd": "vite build -f umd & tsc",
+    "build:es": "tsc && vite build -f es & tsc",
+    "build": "run-p build:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "commander": "^14.0.1",
+    "typescript": "~5.9.2",
+    "vite": "^7.1.5",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}
