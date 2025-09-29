@@ -22,7 +22,10 @@
     "build:amd": "tsc && vite build -f amd & tsc",
     "build:umd": "vite build -f umd & tsc",
     "build:es": "tsc && vite build -f es & tsc",
-    "build": "run-p build:*"
+    "build": "run-p build:*",
+    "doc:dev": "vitepress dev docs",
+    "doc:build": "vitepress build docs",
+    "doc:preview": "vitepress preview docs"
   },
   "dependencies": {
     "antd": "^5.27.4",
@@ -44,7 +47,8 @@
     "typescript-plugin-css-modules": "^5.2.0",
     "vite": "^7.1.5",
     "vite-plugin-dts": "^4.5.4",
-    "vite-plugin-lib-inject-css": "^2.2.2"
+    "vite-plugin-lib-inject-css": "^2.2.2",
+    "vitepress": "^2.0.0-alpha.12"
   },
   "peerDependencies": {
     "antd": "^5.27.4",
