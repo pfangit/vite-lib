@@ -33,7 +33,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: './lib/index.tsx'
+      entry: './src/index.tsx'
     },
     rollupOptions: {
       external: [
@@ -54,12 +54,12 @@ export default defineConfig({
       }),
       ...(multipleInputsMode.indexOf(format) !== -1 && {
         input: Object.fromEntries(
-          glob.sync('lib/**/*.{ts,tsx}').map((file) => [
+          glob.sync('src/**/*.{ts,tsx}').map((file) => [
             // The name of the entry point
-            // lib/nested/foo.ts becomes nested/foo
-            relative('lib', file.slice(0, file.length - extname(file).length)),
+            // src/nested/foo.ts becomes nested/foo
+            relative('src', file.slice(0, file.length - extname(file).length)),
             // The absolute path to the entry file
-            // lib/nested/foo.ts becomes /project/lib/nested/foo.ts
+            // src/nested/foo.ts becomes /project/src/nested/foo.ts
             fileURLToPath(new URL(file, import.meta.url))
           ])
         ),
@@ -72,7 +72,7 @@ export default defineConfig({
               // 获取原始模块路径并转换为输出路径
               const moduleId = chunkInfo.facadeModuleId;
               if (moduleId) {
-                const relativePath = moduleId.replace(process.cwd() + '/lib/', '');
+                const relativePath = moduleId.replace(process.cwd() + '/src/', '');
                 return relativePath.replace(/\.[^/.]+$/, '.js');
               }
               return '[name].js';

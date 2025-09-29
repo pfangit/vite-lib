@@ -29,5 +29,6 @@
       { "name": "typescript-plugin-css-modules" }
     ]
   },
-  "include": ["lib","types.d.ts"]
+  "include": [
+    "src","types.d.ts"]
 }
