@@ -16,6 +16,8 @@ program.parse();
 const options = program.opts();
 const format = options.format || 'es';
 
+const multipleInputsMode = ['es', 'cjs'];
+
 export default defineConfig({
   plugins: [
     react(),
@@ -40,43 +42,54 @@ export default defineConfig({
         ...Object.keys(packageJson.dependencies),
         ...Object.keys(packageJson.peerDependencies)
       ],
-      input: Object.fromEntries(
-        glob.sync('lib/**/*.{ts,tsx}').map((file) => [
-          // The name of the entry point
-          // lib/nested/foo.ts becomes nested/foo
-          relative('lib', file.slice(0, file.length - extname(file).length)),
-          // The absolute path to the entry file
-          // lib/nested/foo.ts becomes /project/lib/nested/foo.ts
-          fileURLToPath(new URL(file, import.meta.url))
-        ])
-      ),
-      output: [
-        {
-          //打包格式
-          format: format,
-          name: 'lib_global_name',
-          //打包后文件名
-          entryFileNames: (chunkInfo) => {
-            // 获取原始模块路径并转换为输出路径
-            const moduleId = chunkInfo.facadeModuleId;
-            if (moduleId) {
-              const relativePath = moduleId.replace(process.cwd() + '/lib/', '');
-              return relativePath.replace(/\.[^/.]+$/, '.js');
-            }
-            return '[name].js';
-          },
-          chunkFileNames: (chunkInfo) => {
-            console.log(chunkInfo);
-            // 对于动态导入的chunk也保持结构
-            return 'chunks/[name]-[hash].js';
-          },
-          //让打包目录和我们目录对应
-          preserveModules: true,
-          exports: 'auto',
-          //配置打包根目录
-          dir: resolve(__dirname, `dist/${format}`)
-        }
-      ]
+      ...(multipleInputsMode.indexOf(format) === -1 && {
+        output: [
+          {
+            format: format,
+            name: 'lib_global_name',
+            //配置打包根目录
+            dir: resolve(__dirname, `dist/${format}`)
+          }
+        ]
+      }),
+      ...(multipleInputsMode.indexOf(format) !== -1 && {
+        input: Object.fromEntries(
+          glob.sync('lib/**/*.{ts,tsx}').map((file) => [
+            // The name of the entry point
+            // lib/nested/foo.ts becomes nested/foo
+            relative('lib', file.slice(0, file.length - extname(file).length)),
+            // The absolute path to the entry file
+            // lib/nested/foo.ts becomes /project/lib/nested/foo.ts
+            fileURLToPath(new URL(file, import.meta.url))
+          ])
+        ),
+        output: [
+          {
+            //打包格式
+            format: format,
+            //打包后文件名
+            entryFileNames: (chunkInfo) => {
+              // 获取原始模块路径并转换为输出路径
+              const moduleId = chunkInfo.facadeModuleId;
+              if (moduleId) {
+                const relativePath = moduleId.replace(process.cwd() + '/lib/', '');
+                return relativePath.replace(/\.[^/.]+$/, '.js');
+              }
+              return '[name].js';
+            },
+            chunkFileNames: (chunkInfo) => {
+              console.log(chunkInfo);
+              // 对于动态导入的chunk也保持结构
+              return 'chunks/[name]-[hash].js';
+            },
+            //让打包目录和我们目录对应
+            preserveModules: true,
+            exports: 'auto',
+            //配置打包根目录
+            dir: resolve(__dirname, `dist/${format}`)
+          }
+        ]
+      })
     }
   }
 });
