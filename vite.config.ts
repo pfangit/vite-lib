@@ -1,15 +1,15 @@
-import { defineConfig } from 'vite';
-import { extname, relative, resolve } from 'path';
-import { program } from 'commander';
-import dts from 'vite-plugin-dts';
-import react from '@vitejs/plugin-react';
-import { libInjectCss } from 'vite-plugin-lib-inject-css';
-import { glob } from 'glob';
 import { fileURLToPath } from 'node:url';
+import react from '@vitejs/plugin-react';
+import { program } from 'commander';
+import { glob } from 'glob';
+import { extname, relative, resolve } from 'path';
+import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
+import { libInjectCss } from 'vite-plugin-lib-inject-css';
 
 import packageJson from './package.json';
 
-program.option('-f, --format <char>').argument('<string>');
+program.option('-f, --format <char>');
 
 program.parse();
 
@@ -38,6 +38,7 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'react',
+        'react-dom',
         'react/jsx-runtime',
         ...Object.keys(packageJson.dependencies),
         ...Object.keys(packageJson.peerDependencies)

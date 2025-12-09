@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Resizable, ResizeCallbackData } from 'react-resizable';
+import type React from 'react';
+import { useState } from 'react';
+import { Resizable, type ResizeCallbackData } from 'react-resizable';
 import './table-header-cell.less';
 
 interface TitlePropsType {
@@ -23,7 +24,7 @@ const TableHeaderCell: React.FC<Readonly<React.HTMLAttributes<any> & TitlePropsT
   };
 
   const onResizeStop = (e: any, data: ResizeCallbackData) => {
-    //onTitleResize(e, data);
+    onTitleResize(e, data);
     console.log(e, data);
   };
 

@@ -25,10 +25,7 @@
     "emitDeclarationOnly": true, // 只输出声明文件(ts 产物)
     "declaration": true, // 自动生成声明文件
     "declarationDir": "dist", // 声明文件生成的目录
-    "plugins": [
-      { "name": "typescript-plugin-css-modules" }
-    ]
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "include": [
-    "src","types.d.ts"]
+  "include": ["src", "types.d.ts"]
 }
